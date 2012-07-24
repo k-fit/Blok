@@ -43,14 +43,14 @@ def half_life(file_path, zipcode, state):
       half_life =  (datetime.strptime(hl_timekey, '%Y%m%d%H') - datetime.strptime(timekey, '%Y%m%d%H')).seconds/3600
       if zipcode:
 	zip_str = '#'.join(list(set(zipcodes_temp)))
-        zip_str = zip_str[1:]
+        if len(zip_str)>0 and zip_str[0]=='#': zip_str = zip_str[1:]
 	#for z in list(set(zipcodes_temp)):
 	 # zip_str = zip_str + str(z) + "#"
      	ret_array = [storykey, half_life, counter, zip_str]
  
       if state:
         state_str = '#'.join(set(states_temp))
-        state_str = state_str[1:]
+        if len(state_str)> 0 and state_str[0] == '#': state_str = state_str[1:]
         #for s in list(set(states_temp)):
 	 # state_str = state_str + str(s) + "#"
         ret_array = [storykey, half_life, counter, state_str]
