@@ -19,26 +19,29 @@ def half_life(file_path, zipcodeflag, stateflag):
   storykey = line[STORYID].strip()
   timekey = line[TIMEKEYID].strip()
   zip_c = line[ZIPCODE].strip()
-
-  timekeys_temp = set().add(timekey)
-  zipcodes_temp = set().add(zipcode)
-  states_temp = set().add(state)
+  state_t = line[STATE].strip()
+  
+  timekeys_temp = [timekey] 
+  zipcodes_temp = set()
+  if zip_c: zipcodes_temp.add(zip_c)
+  states_temp = set()
+  if state_t: states_temp.add(state_t)
 
   tot_counter = 1 
   #iterate over file and return storykey, half_life in hours and number of impressions
   for text in f:
     tot_counter += 1
     line = text.strip().split(DELIMITER)
-    storykey_temp = line[STORYID]
+    storykey_temp = line[STORYID].strip()
     timekey = line[TIMEKEYID].strip()
     zip_c = line[ZIPCODE].strip()
     state_t = line[STATE].strip()
 
     if storykey_temp == storykey:
       counter += 1
-      timekeys_temp.add( timekey )
-      zipcodes_temp.add( zip_c )
-      states_temp.add( state_t )
+      timekeys_temp.append( timekey )
+      if zip_c: zipcodes_temp.add( zip_c )
+      if state_t: states_temp.add( state_t )
     
     else:
       hl_timekey = timekeys_temp[int(floor(counter/2))] 
@@ -53,9 +56,11 @@ def half_life(file_path, zipcodeflag, stateflag):
         ret_array.append(state_str)
       
       storykey = storykey_temp
-      timekeys_temp = set().add(timekey)
-      zipcodes_temp = set().add(zipcode)
-      states_temp = set().add(state)
+      timekeys_temp = [timekey] 
+      zipcodes_temp = set()
+      if zip_c: zipcodes_temp.add(zip_c)
+      states_temp = set()
+      if state_t: states_temp.add(state_t)
  
       print ret_array ### not sure whether we want to make a matrix of these entries or dump to flatfile 
       counter = 1
@@ -64,4 +69,4 @@ def half_life(file_path, zipcodeflag, stateflag):
   f.close()
       
 if __name__ == '__main__':
-  half_life( '/home/ubuntu/newsright/sorted_impressions_test.csv', zipcode=1, state=1)
+  half_life( '/home/ubuntu/newsright/sorted_impressions_test.csv', zipcodeflag = 1, stateflag = 1)
