@@ -2,71 +2,73 @@ from datetime import datetime
 
 from math import floor
 
+def printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag):
+    counter = len(timekeysList)
+    halflife_time = timekeysList[int( floor (counter / 2 ))]
+    
+    half_life =  (datetime.strptime(halflife_time, '%Y%m%d%H') - datetime.strptime(timekeysList[0], '%Y%m%d%H'))   
+    half_life = half_life.total_seconds()
+    half_life = half_life / 3600
+
+    output = [storykey, counter, half_life]
+    
+    if zipcodeflag:
+        zip_str = '#'.join(zipcodeSet)
+        output.append(zip_str)
+    
+    if stateflag:
+        state_str = '#'.join(stateSet)
+        output.append(state_str)
+    
+    return output
+
+
 def half_life(file_path, zipcodeflag, stateflag):
   
-  f = open(file_path, 'r')
-  
-  STORYID = 6 - 1 
-  TIMEKEYID = 11 - 1 
-  ZIPCODE = 44 - 1
-  STATE = 38 - 1 
-  DELIMITER = '|'
+    f = open(file_path, 'r')
 
-  counter = 1
-  ret_array = []
-  text = f.next()
-  line = text.strip().split(DELIMITER)
-  storykey = line[STORYID].strip()
-  timekey = line[TIMEKEYID].strip()
-  zip_c = line[ZIPCODE].strip()
-  state_t = line[STATE].strip()
-  
-  timekeys_temp = [timekey] 
-  zipcodes_temp = set()
-  if zip_c: zipcodes_temp.add(zip_c)
-  states_temp = set()
-  if state_t: states_temp.add(state_t)
+    STORYID = 6 - 1 
+    TIMEKEYID = 11 - 1 
+    ZIPCODE = 44 - 1
+    STATE = 38 - 1 
+    DELIMITER = '|'
 
-  tot_counter = 1 
-  #iterate over file and return storykey, half_life in hours and number of impressions
-  for text in f:
-    tot_counter += 1
+    pointer = f.tell()
+    text = f.next()
     line = text.strip().split(DELIMITER)
-    storykey_temp = line[STORYID].strip()
-    timekey = line[TIMEKEYID].strip()
-    zip_c = line[ZIPCODE].strip()
-    state_t = line[STATE].strip()
+    storykey = line[STORYID].strip()
+    f.seek(pointer)
 
-    if storykey_temp == storykey:
-      counter += 1
-      timekeys_temp.append( timekey )
-      if zip_c: zipcodes_temp.add( zip_c )
-      if state_t: states_temp.add( state_t )
+    timekeysList = [] 
+    zipcodeSet = set()
+    stateSet = set()
+
+    tot_counter = 0
+#iterate over file and return storykey, half_life in hours and number of impressions
+    for text in f:
+        tot_counter += 1
+        
+        line = text.strip().split(DELIMITER)
+        storykey_temp = line[STORYID].strip()
+        timekey = line[TIMEKEYID].strip()
+        zip = line[ZIPCODE].strip()
+        state = line[STATE].strip()
+        
+        if storykey_temp != storykey:
+            print printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag)
+            storykey = storykey_temp
+            timekeysList = []
+            zipcodeSet = set()
+            stateSet = set()
+            
+        timekeysList.append( timekey )
+        if zip: zipcodeSet.add( zip )
+        if state: stateSet.add( state )
     
-    else:
-      hl_timekey = timekeys_temp[int(floor(counter/2))] 
-      half_life =  (datetime.strptime(hl_timekey, '%Y%m%d%H') - datetime.strptime(timekey, '%Y%m%d%H')).seconds/3600
-      ret_array = [storykey, half_life, counter]
-      if zipcodeflag:
-        zip_str = '#'.join(zipcodes_temp)
-        ret_array.append(zip_str)
-      
-      if stateflag:
-        state_str = '#'.join(states_temp)
-        ret_array.append(state_str)
-      
-      storykey = storykey_temp
-      timekeys_temp = [timekey] 
-      zipcodes_temp = set()
-      if zip_c: zipcodes_temp.add(zip_c)
-      states_temp = set()
-      if state_t: states_temp.add(state_t)
- 
-      print ret_array ### not sure whether we want to make a matrix of these entries or dump to flatfile 
-      counter = 1
-
-  print 'total count: ' + str(tot_counter)    
-  f.close()
+    print printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag)
+       
+    print 'total count: ' + str(tot_counter)    
+    f.close()
       
 if __name__ == '__main__':
-  half_life( '/home/ubuntu/newsright/sorted_impressions_test.csv', zipcodeflag = 1, stateflag = 1)
+      half_life( 'sorted_impressions_test.csv', zipcodeflag = 1, stateflag = 1)
