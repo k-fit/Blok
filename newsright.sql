@@ -9,7 +9,7 @@ PRIMARY KEY (storykey)
 );
 
 LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/halflifeinfo_run1.txt'
-INTO TABLE half_life
+INTO TABLE half_life_count
 FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
@@ -18,7 +18,7 @@ LINES TERMINATED BY '\n';
 CREATE TABLE IF NOT EXISTS zipcodes
 (
 storykey int,
-zipcode int,
+zipcode int
 );
 
 LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/zips_run1.txt'
@@ -30,12 +30,12 @@ LINES TERMINATED BY '\n';
 CREATE TABLE IF NOT EXISTS categories
 (
 storykey int,
-categories varchar(64)
+category varchar(64)
 );
 
 LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/story_category_run1.csv'
 INTO TABLE categories
-FIELDS TERMINATED BY ','
+FIELDS TERMINATED BY '|'
 OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
 
