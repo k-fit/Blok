@@ -8,7 +8,7 @@ half_life float,
 PRIMARY KEY (storykey)
 );
 
-LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/half_life_count.txt'
+LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/halflifeinfo_run1.txt'
 INTO TABLE half_life
 FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"'
@@ -21,7 +21,7 @@ storykey int,
 zipcode int,
 );
 
-LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/zipcodes.txt'
+LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/zips_run1.txt'
 INTO TABLE zipcodes
 FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"'
