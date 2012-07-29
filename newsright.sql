@@ -21,6 +21,13 @@ storykey int,
 category varchar(64)
 );
 
+CREATE TABLE IF NOT EXISTS story_info
+(
+storykey int,
+website varchar(64),
+creator varchar(64)
+);
+
 -- RUN 1
 /*
 LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/halflifeinfo_run1.txt'
@@ -40,6 +47,13 @@ INTO TABLE categories
 FIELDS TERMINATED BY '|'
 OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
+
+LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/storyinfo_run1.csv'
+INTO TABLE story_info 
+FIELDS TERMINATED BY '|'
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
 */
 
 -- RUN 2
@@ -58,6 +72,13 @@ LINES TERMINATED BY '\n';
 
 LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/story_category_run2.csv'
 INTO TABLE categories
+FIELDS TERMINATED BY '|'
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+LOAD DATA INFILE '/home/ubuntu/newsright/halflifedata/storyinfo_run2.csv'
+INTO TABLE story_info 
 FIELDS TERMINATED BY '|'
 OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
