@@ -14,7 +14,7 @@ def printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, st
     half_life = half_life.total_seconds()
     half_life = half_life / 3600
 
-    output = [storykey, counter, half_life]
+    output = [storykey, str(counter), str(half_life)]
     
     if zipcodeflag:
         zip_str = '#'.join(zipcodeSet)
@@ -36,7 +36,7 @@ def half_life(file_path, zipcodeflag, stateflag, header):
         head = f.next()
         
     
-    g = open('half_life_run1.txt', 'w')
+    #g = open('half_life_run1.txt', 'w')
 
     STORYID = 1 - 1 
     TIMEKEYID = 2 - 1 
@@ -55,23 +55,15 @@ def half_life(file_path, zipcodeflag, stateflag, header):
     storykey = line[STORYID].strip()
     f.seek(pointer)
     
-
-    
     timekeysList = [] 
     zipcodeSet = set()
     stateSet = set()
-    
 
     tot_counter = 0
 #iterate over file and return storykey, half_life in hours and number of impressions
     for text in f:
         tot_counter += 1
         
-       # if tot_counter ==10000:
-        #    sys.exit()
-         #   g.close()
-          #  f.close()
-
         line = text.strip().split(DELIMITER)
         storykey_temp = line[STORYID].strip()
         timekey = line[TIMEKEYID].strip()
@@ -79,8 +71,8 @@ def half_life(file_path, zipcodeflag, stateflag, header):
         if stateflag: state = line[STATE].strip()
           
         if storykey_temp != storykey:
-            #print printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag)
-            csv.writer(g).writerow(printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag))
+            print ','.join(printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag))
+            #csv.writer(g).writerow(printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag))
             storykey = storykey_temp
             timekeysList = []
             zipcodeSet = set()
@@ -90,10 +82,10 @@ def half_life(file_path, zipcodeflag, stateflag, header):
         if zipcodeflag and zip: zipcodeSet.add( zip )
         if stateflag and state: stateSet.add( state )
     
-    #print printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag)
-    csv.writer(g).writerow(printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag))
+    print ','.join(printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag))
+    #csv.writer(g).writerow(printStoryInfo(storykey, timekeysList, zipcodeSet, stateSet, zipcodeflag, stateflag))
       
-    print 'total count: ' + str(tot_counter)    
+    #print 'total count: ' + str(tot_counter)    
     f.close()
     g.close()
       
